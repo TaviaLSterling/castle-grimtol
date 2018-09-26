@@ -8,6 +8,10 @@ namespace CastleGrimtol.Project
         public string Description { get; set; }
         public List<Item> Items { get; set; }
         public Dictionary<string, Room> Exits { get; set; }
+        public void AddItem(Item item)
+        {
+            Items.Add(item);
+        }
         public Room(string name, string description) {
             Name = name;
             Description = description;

@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 namespace CastleGrimtol.Project
 
 {
     public class Game : IGame
     {
+        public bool Quits = false;
         public Room CurrentRoom { get; set; }
         public Player CurrentPlayer { get; set; }
 
@@ -19,27 +21,29 @@ namespace CastleGrimtol.Project
 
         public void Help()
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Here is a list of things you can do: ");
+            Console.WriteLine("You can type 'go North','go South','go East', or 'go West' to move through the game.");
+
         }
 
         public void Inventory()
         {
-            throw new System.NotImplementedException();
+            Console.Write($"{CurrentPlayer.Inventory}");
         }
 
         public void Look()
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine($"{CurrentRoom.Description}");
         }
 
         public void Quit()
         {
-            throw new System.NotImplementedException();
+            Quits = true;
         }
 
         public void Reset()
         {
-           
+            throw new NotImplementedException();
         }
 
         public void Setup()
@@ -48,7 +52,10 @@ namespace CastleGrimtol.Project
          var roomTwo = new Room("Room Two","This is also a room");
          var roomThree = new Room("Room Three","This is the third room");
          var roomFour = new Room("Room Four","This is the last room");
-         var myItem = new Item("name","description");
+
+         Item key = new Item("Key","a rusty old key");
+         roomTwo.AddItem(key);
+         CurrentRoom = roomOne;
 
         roomOne.Exits.Add("east", roomTwo);
         roomTwo.Exits.Add("east", roomThree);
@@ -57,12 +64,16 @@ namespace CastleGrimtol.Project
 
         public void StartGame()
         {
-            
+            Console.Clear();
+            Setup();
+            Console.WriteLine("Welcome to the Game");
+            Console.Write("Choose which direction to go: ");
+            Console.ReadLine();
         }
 
         public void TakeItem(string itemName)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void UseItem(string itemName)
