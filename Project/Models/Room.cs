@@ -13,6 +13,10 @@ namespace CastleGrimtol.Project
         {
             Items.Add(item);
         }
+        public void Remove(Item item)
+        {
+            Items.Remove(item);
+        }
         public Room ChangeRoom(string direction)
         {
             if(Exits.ContainsKey(direction))
@@ -21,9 +25,14 @@ namespace CastleGrimtol.Project
             }
             else 
             {
-                Console.WriteLine("You can't go that way.");
+                Console.WriteLine("You shouldn't go that way.");
+                Console.WriteLine("Which direction would you like to go?");
                 return this;
             }
+        }
+        public void UseItem(Item item)
+        {
+            
         }
         public Room(string name, string description) {
             Name = name;
