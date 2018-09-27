@@ -42,7 +42,7 @@ namespace CastleGrimtol.Project
     void UseItem(string itemName);
 
     //Print the list of items in the players inventory to the console
-    void Inventory();
+    void Backpack();
 
     //Display the CurrentRoom Description, Exits, and Items
     void Look();

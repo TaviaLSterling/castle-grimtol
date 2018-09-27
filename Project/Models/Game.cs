@@ -5,40 +5,107 @@ namespace CastleGrimtol.Project
 {
     public class Game : IGame
     {
-        public bool Quits = false;
+        bool Playing = true;
         public Room CurrentRoom { get; set; }
         public Player CurrentPlayer { get; set; }
 
         public void GetUserInput()
         {
-            throw new System.NotImplementedException();
+        while(Playing) {
+            string input = Console.ReadLine().ToLower();
+            string input1 = input.Split(" ")[0];
+            string input2 = "";
+            if (input.Split(" ").Length > 1)
+            {
+                input2 = input.Split(" ")[1];
+            }
+
+            switch (input)
+            {
+                case "help":
+                    Help();
+                    break;
+                case "look":
+                    Look();
+                    break;
+                case "take":
+                    TakeItem(input2);
+                    break;
+                    case "use":
+                    UseItem(input2);
+                    break;
+                    case "backpack":
+                    Backpack();
+                    break;
+                case "north":
+                    CurrentRoom = CurrentRoom.ChangeRoom("north");
+                    Look();
+                    Console.Write("Which direction do you go now?");
+                    break;
+                case "east":
+                    CurrentRoom = CurrentRoom.ChangeRoom("east");
+                    Look();
+                    Console.Write("Which direction do you go now?");
+                    break;
+                case "west":
+                    CurrentRoom = CurrentRoom.ChangeRoom("west");
+                    Look();
+                    Console.Write("Which direction do you go now?");
+                    break;
+                case "south":
+                    CurrentRoom = CurrentRoom.ChangeRoom("south");
+                    Look();
+                    Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the piglet burned to a crisp.");
+                    Quit();
+                    break;
+                case "quit":
+                    Quit();
+                    break;
+        }
+            }
         }
 
         public void Go(string direction)
         {
-            
+            if (CurrentRoom.Exits.ContainsKey(direction))
+            {
+                CurrentRoom = CurrentRoom.Exits[direction];
+            }
+            else
+            {
+                Console.WriteLine("You can't go that way");
+            }
         }
 
         public void Help()
         {
             Console.WriteLine("Here is a list of things you can do: ");
-            Console.WriteLine("You can type 'go North','go South','go East', or 'go West' to move through the game.");
-
+            Console.WriteLine("You can type 'North', 'South','East', or 'West' to move through the game.");
+            Console.WriteLine("You can type 'Look' to see a description of where you are.");
+            Console.WriteLine("You can type 'Take' to take an item and put it in your backpack.");
+            Console.WriteLine("You can type 'Use' to use an item that is in your backpack");
+            Console.WriteLine("You can type 'Quit' to fail at saving the poor little piglet and leave the game, you monster.");
+            Console.WriteLine("You can type 'Backpack' to see what items you've picked up along the way.");
+            Console.Write("Time is running out! What would you like to do?");
         }
 
-        public void Inventory()
-        {
-            Console.Write($"{CurrentPlayer.Inventory}");
+        public void Backpack()
+        {   Console.WriteLine("Here's what is in your backpack: ");
+            Console.WriteLine($"{CurrentPlayer.Backpack}");
+            Console.Write("What do you do now? ");
         }
 
         public void Look()
         {
             Console.WriteLine($"{CurrentRoom.Description}");
+            // Console.Write("What do you do now? ");
         }
 
         public void Quit()
         {
-            Quits = true;
+            Console.Clear();
+            Console.WriteLine("You got scared and failed at saving the piglet! Now the sweet smell of bacon permeates the air.");
+            Playing = false;
         }
 
         public void Reset()
@@ -48,37 +115,67 @@ namespace CastleGrimtol.Project
 
         public void Setup()
         {
-         var roomOne = new Room("Room One", "This is a room");
-         var roomTwo = new Room("Room Two","This is also a room");
-         var roomThree = new Room("Room Three","This is the third room");
-         var roomFour = new Room("Room Four","This is the last room");
+            Room field = new Room("Field", "You are standing in a field and see a barn burning to the North. You hear the sound of a poor squealing piglet that's trapped in the burning barn. You should probably go save it, brave Samaritan!");
+            Room barnRoomOne = new Room("Main Barn Room", "You have entered the main room of the barn. The fire has engulfed the door that you entered through, but luckily you see the squealing piglet! He's so cute. You should probably grab him and get out of here!");
+            Room emptyPen = new Room("Empty Pig Pen", "You made your way into an empty pig pen. The barn is starting to collapse around you. You should probably keep moving.");
+            Room backRoom = new Room("Room Four", "You've come to the end of the barn. The fire is closing in on all sides now. You see a window that's a little too high for you to reach. If only you had something sturdy to stand on...");
 
-         Item key = new Item("Key","a rusty old key");
-         roomTwo.AddItem(key);
-         CurrentRoom = roomOne;
+            Item pig = new Item("Pig", "it's a pig");
+            // Item key = new Item("Key","a rusty old key");
 
-        roomOne.Exits.Add("east", roomTwo);
-        roomTwo.Exits.Add("east", roomThree);
-        roomThree.Exits.Add("east", roomFour);
+            barnRoomOne.AddItem(pig);
+            //  roomThree.AddItem(key);
+            CurrentRoom = field;
+
+            field.Exits.Add("north", barnRoomOne);
+            barnRoomOne.Exits.Add("west", field);
+            barnRoomOne.Exits.Add("east", emptyPen);
+            emptyPen.Exits.Add("west", barnRoomOne);
+            emptyPen.Exits.Add("east", backRoom);
+            backRoom.Exits.Add("west", emptyPen);
         }
 
         public void StartGame()
         {
             Console.Clear();
             Setup();
-            Console.WriteLine("Welcome to the Game");
+            Console.WriteLine("You can type 'North','South','East', or 'West' to move through this game.");
+            Console.WriteLine("If you need assistance just type 'Help', or type 'Quit' at any point to end the game.");
+
+            Console.WriteLine($"{CurrentRoom.Description}");
             Console.Write("Choose which direction to go: ");
-            Console.ReadLine();
+            GetUserInput();
         }
 
         public void TakeItem(string itemName)
         {
-            
+            Item item = CurrentRoom.Items.Find(i => i.Name.ToUpper().Contains(itemName));
+            if (CurrentRoom.Items.Contains(item))
+            {
+                Console.WriteLine($"You picked up the piglet and put it in your backpack");
+                Console.WriteLine("Where would you like to go now?");
+                CurrentPlayer.Backpack.Add(item);
+                CurrentRoom.Items.Remove(item);
+            }
         }
 
         public void UseItem(string itemName)
         {
-            throw new System.NotImplementedException();
+            Item item = CurrentPlayer.Backpack.Find(i => i.Name.ToUpper().Contains(itemName));
+            if (item != null)
+            {
+                if (itemName == "Pig")
+                {
+                    CurrentPlayer.Backpack.Remove(item);
+                }
+            }
+
+
+
+            //   if(itemName == "Pig" && CurrentRoom == roomFour && CurrentPlayer.Inventory.Contains(pig))
+            //   {
+
+            //   }
         }
     }
 }

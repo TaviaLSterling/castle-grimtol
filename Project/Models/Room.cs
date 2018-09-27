@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace CastleGrimtol.Project
@@ -11,6 +12,18 @@ namespace CastleGrimtol.Project
         public void AddItem(Item item)
         {
             Items.Add(item);
+        }
+        public Room ChangeRoom(string direction)
+        {
+            if(Exits.ContainsKey(direction))
+            {
+                return Exits[direction];
+            }
+            else 
+            {
+                Console.WriteLine("You can't go that way.");
+                return this;
+            }
         }
         public Room(string name, string description) {
             Name = name;
