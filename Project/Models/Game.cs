@@ -50,6 +50,10 @@ namespace CastleGrimtol.Project
                         Console.Write("Which direction do you go now?");
                         break;
                     case "west":
+                        if(CurrentRoom.Name == "Main Barn Room")
+                    {
+                       
+                    }
                         CurrentRoom = CurrentRoom.ChangeRoom("west");
                         Look();
                         Console.Write("Which direction do you go now?");
@@ -120,7 +124,7 @@ public void Look()
                 Console.WriteLine("Congratulations! You win!");
                 Quit();
             }
-            else if(CurrentRoom.Name == "backroom" && CurrentPlayer.Backpack == 0 ) 
+            else if(CurrentRoom.Name == "Room Four" && CurrentPlayer.Backpack.Count == 0) 
             {
                 Console.WriteLine("You forgot to grab the pig! There's no way out and you both burn alive.");
                 Console.WriteLine("You have lost the game.");
@@ -194,7 +198,7 @@ public void UseItem(string itemName)
     Item item = CurrentPlayer.Backpack.Find(i => i.Name.ToLower().Contains(itemName));
     if (item != null)
     {
-        if (itemName == "Pig")
+        if (CurrentRoom.Name == "Room Four" && itemName == "Pig")
         {
             CurrentPlayer.Backpack.Remove(item);
             Console.WriteLine("You successfully retrieved the stout piglet from your backpack. Eventually you get the piglet to stand still long enough to stand on it's back and reach the window. You open the window, grab the terrified piglet, and jump out the window.");
@@ -205,19 +209,13 @@ public void UseItem(string itemName)
 
     //   if(itemName == "Pig" && CurrentRoom == roomFour && CurrentPlayer.Inventory.Contains(pig))
     //   {
-
+    // 
     //   }
 }
-        // public void EndGame()
-        // {
-        //     if (input == "south")
-        //     {
-        //         Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the piglet burned to a crisp.");
-        //     }
-        //     else
-        //     {
-
-        //     }
-        // }
+        public void EndGame()
+        {
+         Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the piglet burned to a crisp.");
+           Quit();
+           }
     }
 }
