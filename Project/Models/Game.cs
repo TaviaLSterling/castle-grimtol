@@ -87,7 +87,7 @@ namespace CastleGrimtol.Project
         public void Help()
         {
             Console.WriteLine("Here is a list of things you can do: \n");
-            Console.WriteLine("You can type 'North', 'South','East', or 'West' to move through the game.");
+            Console.WriteLine("You can type 'Go North', 'Go South','Go East', or 'Go West' to move through the game.");
             Console.WriteLine("You can type 'Look' to see a description of where you are.");
             Console.WriteLine("You can type 'Take' and the item name to take an item and put it in your backpack.");
             Console.WriteLine("You can type 'Use' and the item name to use an item that is in your backpack");
