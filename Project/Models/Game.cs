@@ -13,11 +13,14 @@ namespace CastleGrimtol.Project
         public void GetUserInput()
         {
             while (Playing)
+            //command seperate from direction
             {   Console.Write("What do you do now?");
                 string input = Console.ReadLine().ToLower();
                 string firstWord = input.Split(" ")[0];
+                //first word
                 string secondWord = "";
                 if (input.Split(" ").Length > 1)
+                //second word
                 {
                     secondWord = input.Split(" ")[1];
                 }
@@ -83,12 +86,12 @@ namespace CastleGrimtol.Project
 
         public void Help()
         {
-            Console.WriteLine("Here is a list of things you can do: ");
+            Console.WriteLine("Here is a list of things you can do: \n");
             Console.WriteLine("You can type 'North', 'South','East', or 'West' to move through the game.");
             Console.WriteLine("You can type 'Look' to see a description of where you are.");
-            Console.WriteLine("You can type 'Take' to take an item and put it in your backpack.");
-            Console.WriteLine("You can type 'Use' to use an item that is in your backpack");
-            Console.WriteLine("You can type 'Quit' to fail at saving the piglet and leave the game.");
+            Console.WriteLine("You can type 'Take' and the item name to take an item and put it in your backpack.");
+            Console.WriteLine("You can type 'Use' and the item name to use an item that is in your backpack");
+            Console.WriteLine("You can type 'Quit' to fail at saving the pig and leave the game.");
             Console.WriteLine("You can type 'Backpack' to see what items you've picked up along the way.");
             Console.WriteLine("Time is running out!");
         }
@@ -136,7 +139,10 @@ public void Look()
                 Console.WriteLine("You have lost the game.");
                 Quit();
             }
-
+            // else if(CurrentRoom.Name == "Main Barn Room" && CurrentRoom == CurrentRoom.Exits["south"])
+            // { 
+            //     Console.WriteLine("you died");
+            // }
     // Console.Write("What do you do now? ");
 }
 
@@ -154,12 +160,12 @@ public void Reset()
 
 public void Setup()
 {
-    Room field = new Room("Field", "You are standing in a field and see a barn burning to the North. You hear the sound of a poor squealing piglet that's trapped in the burning barn. You should probably go save it, brave Samaritan!");
-    Room barnRoomOne = new Room("Main Barn Room", "You have entered the main room of the barn. The fire has engulfed the door that you entered through, but luckily you see the squealing piglet! He's so cute. You should probably grab him and get out of here!");
+    Room field = new Room("Field", "You are standing in a field and see a barn burning to the North. You hear the sound of a poor squealing pig that's trapped in the burning barn. You should probably go save it, brave Samaritan!");
+    Room barnRoomOne = new Room("Main Barn Room", "You have entered the main room of the barn. The fire has engulfed the door that you entered through, but luckily you see the squealing pig! He's so cute. You should probably grab him and get out of here!");
     Room emptyPen = new Room("Empty Pig Pen", "You made your way into an empty pig pen. The barn is starting to collapse around you. You should probably keep moving.");
     Room backRoom = new Room("Room Four", "You've come to the end of the barn. The fire is closing in on all sides now. You see a window that's a little too high for you to reach. If only you had something sturdy to stand on...");
 
-    Item pig = new Item("Pig", "it's a scared little piglet");
+    Item pig = new Item("Pig", "it's a scared little pig");
     // Item key = new Item("Key","a rusty old key");
 
     barnRoomOne.AddItem(pig);
@@ -180,8 +186,9 @@ public void StartGame()
 {
     Console.Clear();
     Setup();
-    Console.WriteLine("You can type 'North','South','East', or 'West' to move through this game.");
-    Console.WriteLine("If you need assistance just type 'Help', or type 'Quit' at any point to end the game.");
+    Console.WriteLine("You can type 'Go North','Go South','Go East', or 'Go West' to move through this game.\n");
+    Console.WriteLine("If you need assistance just type 'Help', or type 'Quit' at any point to end the game.\n");
+    Console.WriteLine("You can also type 'Backpack' to see what you've picked up along the way\n");
 
     Console.WriteLine($"{CurrentRoom.Description}");
     // Console.Write("Choose which direction to go: ");
@@ -193,7 +200,7 @@ public void TakeItem(string itemName)
     Item item = CurrentRoom.Items.Find(i => i.Name.ToLower().Contains(itemName));
     if (CurrentRoom.Items.Contains(item))
     {
-        Console.WriteLine("You picked up the piglet and put it in your backpack");
+        Console.WriteLine("You picked up the pig and put it in your backpack");
         // Console.WriteLine("Where would you like to go now?");
         CurrentPlayer.Backpack.Add(item);
         CurrentRoom.Items.Remove(item);
@@ -208,7 +215,7 @@ public void UseItem(string itemName)
         if (CurrentRoom.Name == "Room Four" && itemName == "pig")
         {
             CurrentPlayer.Backpack.Remove(item);
-            Console.WriteLine("You successfully retrieved the stout piglet from your backpack. Eventually you get the piglet to stand still long enough to stand on it's back and reach the window. You open the window, grab the terrified piglet, and jump out the window.");
+            Console.WriteLine("You successfully retrieved the stout pig from your backpack. Eventually you get the pig to stand still long enough to stand on it's back and reach the window. You open the window, grab the terrified pig, and jump out the window together.\n");
             Winning();
         }
     }
@@ -225,7 +232,7 @@ public void UseItem(string itemName)
             if(CurrentRoom.Name == "Main Barn Room" &&  CurrentRoom == CurrentRoom.Exits["south"]){
 
         Console.Clear();
-         Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the piglet burned to a crisp.");
+         Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the pig burned to a crisp.");
         //    Quit();
       Console.WriteLine("Would you like to play again? Y/N?");
       var answer = Console.ReadLine().ToLower();
