@@ -13,13 +13,13 @@ namespace CastleGrimtol.Project
         public void GetUserInput()
         {
             while (Playing)
-            {
+            {   Console.Write("What do you do now?");
                 string input = Console.ReadLine().ToLower();
-                string input1 = input.Split(" ")[0];
-                string input2 = "";
+                string firstWord = input.Split(" ")[0];
+                string secondWord = "";
                 if (input.Split(" ").Length > 1)
                 {
-                    input2 = input.Split(" ")[1];
+                    secondWord = input.Split(" ")[1];
                 }
 
                 switch (input)
@@ -30,41 +30,41 @@ namespace CastleGrimtol.Project
                     case "look":
                         Look();
                         break;
-                    case "take":
-                        TakeItem(input2);
+                    case "take pig":
+                        TakeItem(secondWord);
                         break;
-                    case "use":
-                        UseItem(input2);
+                    case "use pig":
+                        UseItem(secondWord);
                         break;
                     case "backpack":
                         Backpack();
                         break;
-                    case "north":
+                    case "go north":
+                    // Go("north");
                         CurrentRoom = CurrentRoom.ChangeRoom("north");
                         Look();
-                        Console.Write("Which direction do you go now?");
                         break;
-                    case "east":
+                    case "go east":
+                    //  Go("east");
                         CurrentRoom = CurrentRoom.ChangeRoom("east");
                         Look();
-                        Console.Write("Which direction do you go now?");
                         break;
-                    case "west":
-                        if(CurrentRoom.Name == "Main Barn Room")
-                    {
-                       
-                    }
+                    case "go west":
+                    // Go("west")
                         CurrentRoom = CurrentRoom.ChangeRoom("west");
                         Look();
-                        Console.Write("Which direction do you go now?");
                         break;
-                    case "south":
+                    case "go south":
+                    // Go("south");
                         CurrentRoom = CurrentRoom.ChangeRoom("south");
-                        // EndGame();
+                        Look();
                         break;
                     case "quit":
                         Quit();
                         break;
+                        // default:
+                        // Console.WriteLine("You cannot do that.");
+                        // break;
                 }
             }
         }
@@ -75,10 +75,10 @@ namespace CastleGrimtol.Project
             {
                 CurrentRoom = CurrentRoom.Exits[direction];
             }
-            else
-            {
-                Console.WriteLine("You shouldn't go that way");
-            }
+            // else
+            // {
+            //     Console.WriteLine("You shouldn't go that way");
+            // }
         }
 
         public void Help()
@@ -88,9 +88,9 @@ namespace CastleGrimtol.Project
             Console.WriteLine("You can type 'Look' to see a description of where you are.");
             Console.WriteLine("You can type 'Take' to take an item and put it in your backpack.");
             Console.WriteLine("You can type 'Use' to use an item that is in your backpack");
-            Console.WriteLine("You can type 'Quit' to fail at saving the poor little piglet and leave the game, you monster.");
+            Console.WriteLine("You can type 'Quit' to fail at saving the piglet and leave the game.");
             Console.WriteLine("You can type 'Backpack' to see what items you've picked up along the way.");
-            Console.Write("Time is running out! What would you like to do?");
+            Console.WriteLine("Time is running out!");
         }
 
         public void Backpack()
@@ -101,7 +101,7 @@ namespace CastleGrimtol.Project
          {
              Console.WriteLine("Here's what is in your backpack: ");
              Console.WriteLine($"{Item.Name}");
-             Console.Write("What do you do now? ");
+            //  Console.Write("What do you do now? ");
          });
             }
             else
@@ -112,7 +112,12 @@ namespace CastleGrimtol.Project
     
 
     
-
+public void Winning()
+{
+     Console.WriteLine("You and the pig have made it out alive!");
+                Console.WriteLine("Congratulations! You win!");
+                Quit();
+}
 
 
 public void Look()
@@ -122,12 +127,14 @@ public void Look()
             {
                 Console.WriteLine("You and the pig have made it out alive!");
                 Console.WriteLine("Congratulations! You win!");
+                Winning();
                 Quit();
             }
             else if(CurrentRoom.Name == "Room Four" && CurrentPlayer.Backpack.Count == 0) 
             {
                 Console.WriteLine("You forgot to grab the pig! There's no way out and you both burn alive.");
                 Console.WriteLine("You have lost the game.");
+                Quit();
             }
 
     // Console.Write("What do you do now? ");
@@ -135,8 +142,8 @@ public void Look()
 
 public void Quit()
 {
-    Console.Clear();
-    Console.WriteLine("You got scared and failed at saving the piglet! Now the sweet smell of bacon permeates the air.");
+    // Console.Clear();
+    // Console.WriteLine("You got scared and failed at saving the piglet! Now the sweet smell of bacon permeates the air.");
     Playing = false;
 }
 
@@ -177,7 +184,7 @@ public void StartGame()
     Console.WriteLine("If you need assistance just type 'Help', or type 'Quit' at any point to end the game.");
 
     Console.WriteLine($"{CurrentRoom.Description}");
-    Console.Write("Choose which direction to go: ");
+    // Console.Write("Choose which direction to go: ");
     GetUserInput();
 }
 
@@ -187,7 +194,7 @@ public void TakeItem(string itemName)
     if (CurrentRoom.Items.Contains(item))
     {
         Console.WriteLine("You picked up the piglet and put it in your backpack");
-        Console.WriteLine("Where would you like to go now?");
+        // Console.WriteLine("Where would you like to go now?");
         CurrentPlayer.Backpack.Add(item);
         CurrentRoom.Items.Remove(item);
     }
@@ -198,10 +205,11 @@ public void UseItem(string itemName)
     Item item = CurrentPlayer.Backpack.Find(i => i.Name.ToLower().Contains(itemName));
     if (item != null)
     {
-        if (CurrentRoom.Name == "Room Four" && itemName == "Pig")
+        if (CurrentRoom.Name == "Room Four" && itemName == "pig")
         {
             CurrentPlayer.Backpack.Remove(item);
             Console.WriteLine("You successfully retrieved the stout piglet from your backpack. Eventually you get the piglet to stand still long enough to stand on it's back and reach the window. You open the window, grab the terrified piglet, and jump out the window.");
+            Winning();
         }
     }
 
@@ -214,8 +222,23 @@ public void UseItem(string itemName)
 }
         public void EndGame()
         {
+            if(CurrentRoom.Name == "Main Barn Room" &&  CurrentRoom == CurrentRoom.Exits["south"]){
+
+        Console.Clear();
          Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the piglet burned to a crisp.");
-           Quit();
+        //    Quit();
+      Console.WriteLine("Would you like to play again? Y/N?");
+      var answer = Console.ReadLine().ToLower();
+      if (answer == "y")
+      {
+       
+        StartGame();
+      }
+      else
+      {
+        Quit();
+      }
+            }
+    }
            }
     }
-}

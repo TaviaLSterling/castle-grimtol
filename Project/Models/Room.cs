@@ -26,8 +26,8 @@ namespace CastleGrimtol.Project
             else 
             {
                 Console.WriteLine("You shouldn't go that way.");
-                Console.WriteLine("Which direction would you like to go?");
-                return this;
+                // Console.WriteLine("Which direction would you like to go?");
+                 return this;
             }
         }
         public void UseItem(Item item)
