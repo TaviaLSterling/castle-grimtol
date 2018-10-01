@@ -59,8 +59,15 @@ namespace CastleGrimtol.Project
                         break;
                     case "go south":
                     // Go("south");
+                        if(CurrentRoom.Name == "Main Barn Room")
+                        {
+                            EndGame();
+                        }
+                        else {
+
                         CurrentRoom = CurrentRoom.ChangeRoom("south");
                         Look();
+                        }
                         break;
                     case "quit":
                         Quit();
@@ -229,7 +236,6 @@ public void UseItem(string itemName)
 }
         public void EndGame()
         {
-            if(CurrentRoom.Name == "Main Barn Room" &&  CurrentRoom == CurrentRoom.Exits["south"]){
 
         Console.Clear();
          Console.Write("You tried to go back the way you came. The fire collapsed the barn around you, and you and the pig burned to a crisp.");
@@ -248,4 +254,4 @@ public void UseItem(string itemName)
             }
     }
            }
-    }
+    
